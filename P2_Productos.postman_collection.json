@@ -1,0 +1,79 @@
+{
+  "info": {
+    "name": "P2 Productos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. GET todos",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/productos"
+      }
+    },
+    {
+      "name": "2. GET uno",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/productos/1"
+      }
+    },
+    {
+      "name": "3. GET no existe",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/api/productos/99"
+      }
+    },
+    {
+      "name": "4. POST crear",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Monitor\", \"precio\": 2500, \"stock\": 5}"
+        },
+        "url": "http://localhost:3000/api/productos"
+      }
+    },
+    {
+      "name": "5. POST error validacion",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"\", \"precio\": -1}"
+        },
+        "url": "http://localhost:3000/api/productos"
+      }
+    },
+    {
+      "name": "6. PUT actualizar",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\": \"Teclado RGB\", \"precio\": 420, \"stock\": 8}"
+        },
+        "url": "http://localhost:3000/api/productos/1"
+      }
+    },
+    {
+      "name": "7. DELETE eliminar",
+      "request": {
+        "method": "DELETE",
+        "url": "http://localhost:3000/api/productos/2"
+      }
+    },
+    {
+      "name": "8. DELETE no existe",
+      "request": {
+        "method": "DELETE",
+        "url": "http://localhost:3000/api/productos/2"
+      }
+    }
+  ]
+}

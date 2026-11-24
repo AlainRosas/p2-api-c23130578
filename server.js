@@ -1,10 +1,15 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const ORIGENES = (process.env.ORIGEN_PERMITIDO || "")
+  .split(",")
+  .map(origen => origen.trim())
+  .filter(Boolean);
+
+app.use(cors({ origin: ORIGENES }));
 app.use(express.json());
 
 let productos = [
@@ -35,6 +40,21 @@ app.get("/api/productos", (req, res) => {
   res.status(200).json(productos);
 });
 
+
+
+
+function requiereToken(req, res, next) {
+  if (req.get("x-api-key") !== process.env.API_KEY) {
+    return res.status(401).json({ error: "Token inválido o ausente" });
+  }
+  next();
+}
+
+
+
+
+
+
 app.get("/api/productos/:id", (req, res) => {
   const id = Number(req.params.id);
   const producto = productos.find(p => p.id === id);
@@ -44,7 +64,7 @@ app.get("/api/productos/:id", (req, res) => {
   res.status(200).json(producto);
 });
 
-app.post("/api/productos", (req, res) => {
+app.post("/api/productos", requiereToken, (req, res) => {
   const errores = validar(req.body);
   if (errores.length > 0) {
     return res.status(400).json({ errores });
@@ -59,7 +79,7 @@ app.post("/api/productos", (req, res) => {
   res.status(201).json(nuevo);
 });
 
-app.put("/api/productos/:id", (req, res) => {
+app.put("/api/productos/:id", requiereToken, (req, res) => {
   const id = Number(req.params.id);
   const indice = productos.findIndex(p => p.id === id);
   if (indice === -1) {
@@ -78,7 +98,7 @@ app.put("/api/productos/:id", (req, res) => {
   res.status(200).json(productos[indice]);
 });
 
-app.delete("/api/productos/:id", (req, res) => {
+app.delete("/api/productos/:id", requiereToken, (req, res) => {
   const id = Number(req.params.id);
   const existe = productos.some(p => p.id === id);
   if (!existe) {
